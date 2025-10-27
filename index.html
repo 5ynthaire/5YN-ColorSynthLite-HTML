@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Synth Lite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Poirot+One&family=Merriweather&family=Concert+One&family=Inconsolata:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Merriweather', serif;
+            background-color: #FFFFFF;
+            color: #333;
+            display: block;
+            box-sizing: border-box;
+        }
+        header {
+            display: grid;
+            grid-template-columns: 1fr 340px 340px 340px 1fr;
+            gap: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header-content {
+            grid-column: 2 / 5;
+        }
+        h1 {
+            font-family: 'Lora', sans-serif;
+            font-weight: 700;
+            margin: 0 0 0.1em 0;
+        }
+        .header-subtitle {
+            font-family: 'Poiret One', cursive;
+            font-weight: 400;
+            margin: 0 0 1em 0;
+            font-size: 1.2em;
+        }
+        .usage {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .usage h3 {
+            font-family: 'Merriweather', serif;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .usage ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+        .usage li {
+            margin-bottom: 0.5em;
+        }
+        .columns-container {
+            display: grid;
+            grid-template-columns: 1fr 340px 340px 340px 1fr;
+            gap: 20px;
+            align-items: flex-start;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .column {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .left {
+            grid-column: 2;
+        }
+        .center {
+            grid-column: 3;
+            background-color: #FFFFFF;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .right {
+            grid-column: 4;
+            /* Alchemy Lab */
+        }
+        h2 {
+            font-family: 'Concert One', sans-serif;
+            font-weight: 400;
+            font-size: 1.5em;
+            margin-bottom: 1em;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5em;
+        }
+        .functional-label {
+            font-family: 'Inconsolata', monospace;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .alchemy-section {
+            margin-bottom: 20px;
+        }
+        .radio-group {
+            margin-bottom: 10px;
+        }
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+        label {
+            font-family: 'Inconsolata', monospace;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            table-layout: fixed;
+        }
+        td {
+            padding: 5px;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+            width: 33.33%;
+            font-family: 'Inconsolata', monospace;
+        }
+        input[type="text"] {
+            font-family: 'Inconsolata', monospace;
+            width: 60px;
+            margin: 0 5px;
+        }
+        .hex-input {
+            font-family: 'Inconsolata', monospace;
+            width: 80px;
+        }
+        .bg-label {
+            font-family: 'Inconsolata', monospace;
+            font-weight: 400;
+            text-align: center;
+            display: block;
+            line-height: 1em;
+            margin-bottom: 0.5em;
+        }
+        .bg-controls {
+            text-align: center;
+            line-height: 1em;
+            margin-top: 10px;
+        }
+        .bg-hash {
+            font-family: 'Inconsolata', monospace;
+            margin-right: 5px;
+        }
+        .color-square {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .color-square:hover {
+            opacity: 0.9;
+        }
+        .update-btn {
+            font-family: 'Inconsolata', monospace;
+            width: 100%;
+            height: 40px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            background-color: #f0f0f0;
+            color: #000000;
+            border: 1px solid #cccccc;
+            opacity: 1;
+            font-weight: 400;
+        }
+        .bg-update-btn {
+            font-family: 'Inconsolata', monospace;
+            width: auto;
+            height: 30px;
+            padding: 0 10px;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+        hr {
+            margin: 15px 0;
+        }
+        h3 {
+            font-family: 'Inconsolata', monospace;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        #swap-table td {
+            text-align: center;
+        }
+        .swap-btn {
+            font-family: 'Inconsolata', monospace;
+            width: auto;
+            height: 30px;
+            padding: 0 10px;
+            background-color: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-weight: 400;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .swap-btn:hover {
+            background-color: #ccc;
+        }
+        .secondary-label {
+            font-family: 'Inconsolata', monospace;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        .midpoint-btn {
+            font-family: 'Inconsolata', monospace;
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            background-color: #f0f0f0;
+            color: #000000;
+            border: 1px solid #cccccc;
+            opacity: 1;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        .midpoint-btn:hover {
+            background-color: #e0e0e0;
+        }
+        footer {
+            display: grid;
+            grid-template-columns: 1fr 340px 340px 340px 1fr;
+            gap: 20px;
+            text-align: center;
+            font-family: 'Merriweather', serif;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 20px;
+        }
+        .footer-content {
+            grid-column: 2 / 5;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .footer-links a {
+            color: #333;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            font-family: 'Inconsolata', monospace;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Color Synth Lite</h1>
+            <div class="header-subtitle">A lightweight offline tool for hex color experiments</div>
+            <div class="usage">
+                <h3>Usage</h3>
+                <ul>
+                    <li>Enter values in Hex, RGB, or HSV; hit Update to preview.</li>
+                    <li>Use Alchemy Lab for channel swaps and midpoints between colors.</li>
+                    <li>Click the preview square to copy hex.</li>
+                </ul>
+            </div>
+            <hr>
+        </div>
+    </header>
+    <div class="columns-container">
+        <div class="column left">
+            <h2>Basic Controls</h2>
+            <button id="basic-update-btn" class="update-btn" disabled>UPDATE</button>
+            <hr>
+            <div class="section">
+                <div class="radio-group">
+                    <input type="radio" id="hex-radio" name="color-mode" value="hex" checked>
+                    <label for="hex-radio" class="functional-label">Hex Code</label>
+                </div>
+                <label for="hex-input" class="functional-label">#</label>
+                <input type="text" id="hex-input" value="000000" class="hex-input" maxlength="20">
+            </div>
+            <hr>
+            <div class="section">
+                <div class="radio-group">
+                    <input type="radio" id="rgb-radio" name="color-mode" value="rgb">
+                    <label for="rgb-radio" class="functional-label">RGB</label>
+                </div>
+                <table id="rgb-table">
+                    <tr>
+                        <td class="functional-label">Red</td>
+                        <td><input type="text" id="r-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 255</td>
+                        <td><input type="text" id="r-per" value="0" size="3">%</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Green</td>
+                        <td><input type="text" id="g-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 255</td>
+                        <td><input type="text" id="g-per" value="0" size="3">%</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Blue</td>
+                        <td><input type="text" id="b-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 255</td>
+                        <td><input type="text" id="b-per" value="0" size="3">%</td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div class="section">
+                <div class="radio-group">
+                    <input type="radio" id="hsv-radio" name="color-mode" value="hsv">
+                    <label for="hsv-radio" class="functional-label">HSV</label>
+                </div>
+                <table id="hsv-table">
+                    <tr>
+                        <td class="functional-label">Hue</td>
+                        <td><input type="text" id="h-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 360</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Saturation</td>
+                        <td><input type="text" id="s-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 100</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Value</td>
+                        <td><input type="text" id="v-abs" value="0" size="3"></td>
+                        <td class="functional-label">/ 100</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="column center">
+            <h2 id="preview-heading" class="preview-heading">Preview Area</h2>
+            <div id="color-square" class="color-square" title="Click to copy hex"></div>
+            <label for="bg-input" class="bg-label">Preview area background color:</label>
+            <div class="bg-controls">
+                <span id="bg-hash" class="bg-hash">#</span><input type="text" id="bg-input" value="FFFFFF" class="hex-input" maxlength="20">
+                <button id="bg-update-btn" class="update-btn bg-update-btn" disabled>APPLY BG COLOR</button>
+            </div>
+        </div>
+        <div class="column right">
+            <h2>Alchemy Lab</h2>
+            <div class="alchemy-section">
+                <h3>Channel Swap</h3>
+                <table id="swap-table">
+                    <tr>
+                        <td class="functional-label">Red</td>
+                        <td><button class="swap-btn" id="swap-rg">← SWAP →</button></td>
+                        <td class="functional-label">Green</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Green</td>
+                        <td><button class="swap-btn" id="swap-gb">← SWAP →</button></td>
+                        <td class="functional-label">Blue</td>
+                    </tr>
+                    <tr>
+                        <td class="functional-label">Blue</td>
+                        <td><button class="swap-btn" id="swap-br">← SWAP →</button></td>
+                        <td class="functional-label">Red</td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div class="alchemy-section">
+                <h3>Midpoint</h3>
+                <label for="secondary-hex" class="secondary-label">Secondary color: # <input type="text" id="secondary-hex" value="000000" class="hex-input" maxlength="20"></label>
+                <button class="midpoint-btn" id="rgb-midpoint">➕ RGB MIDPOINT</button>
+                <button class="midpoint-btn" id="brightness-midpoint">➕ BRIGHTNESS MIDPOINT</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <span class="footer-links">
+                <a href="https://github.com/5ynthaire/5YN-ColorSynthLite-HTML">Color Synth Lite</a> &mdash; MIT License | 
+                <a href="https://github.com/5ynthaire/">@5ynthaire</a>
+            </span>
+        </div>
+    </footer>
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Color state - square color
+        let currentColor = { r: 0, g: 0, b: 0, h: 0, s: 0, v: 0, hex: '#000000' };
+        let currentSection = 'hex';
+        let isDirty = false;
+        let previousValidColor = { ...currentColor };
+        let isSyncing = false;
+        const centerColumn = document.querySelector('.center');
+        const bgLabel = document.querySelector('.bg-label');
+        const previewHeading = document.getElementById('preview-heading');
+        const bgHash = document.getElementById('bg-hash');
+        const basicUpdateBtn = document.getElementById('basic-update-btn');
+        const bgUpdateBtn = document.getElementById('bg-update-btn');
+        const toast = document.getElementById('toast');
+
+        // Utility functions
+        function rgbToHex(r, g, b) {
+            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+
+        function hexToRgb(hexStr) {
+            const hex = hexStr.toUpperCase().trim();
+            if (!/^[0-9A-F]{6}$/i.test(hex)) return null;
+            const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHsv(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, v = max;
+
+            const d = max - min;
+            s = max === 0 ? 0 : d / max;
+
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), v: Math.round(v * 100) };
+        }
+
+        function hsvToRgb(h, s, v) {
+            h /= 360; s /= 100; v /= 100;
+            const i = Math.floor(h * 6);
+            const f = h * 6 - i;
+            const p = v * (1 - s);
+            const q = v * (1 - f * s);
+            const t = v * (1 - (1 - f) * s);
+            let r, g, b;
+
+            switch (i % 6) {
+                case 0: [r, g, b] = [v, t, p]; break;
+                case 1: [r, g, b] = [q, v, p]; break;
+                case 2: [r, g, b] = [p, v, t]; break;
+                case 3: [r, g, b] = [p, q, v]; break;
+                case 4: [r, g, b] = [t, p, v]; break;
+                case 5: [r, g, b] = [v, p, q]; break;
+            }
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
+
+        function updateHeadingColor(bgHex) {
+            const bgRgb = hexToRgb(bgHex);
+            if (!bgRgb) return;
+
+            // Invert RGB for HG_base
+            const hgBaseRgb = {
+                r: 255 - bgRgb.r,
+                g: 255 - bgRgb.g,
+                b: 255 - bgRgb.b
+            };
+
+            // Get HSV for BG and HG_base
+            const bgHsv = rgbToHsv(bgRgb.r, bgRgb.g, bgRgb.b);
+            const hgBaseHsv = rgbToHsv(hgBaseRgb.r, hgBaseRgb.g, hgBaseRgb.b);
+
+            // Compute delta on V
+            const deltaV = Math.abs(hgBaseHsv.v - bgHsv.v);
+
+            let hgHsv = { ...hgBaseHsv };
+            if (deltaV < 50) {
+                // Force to opposite end: if BG_V < 50 (darker half), HG_V=100; else 0
+                hgHsv.v = bgHsv.v < 50 ? 100 : 0;
+            }
+
+            // Convert back to RGB and set color
+            const hgRgb = hsvToRgb(hgHsv.h, hgHsv.s, hgHsv.v);
+            const hgHex = rgbToHex(hgRgb.r, hgRgb.g, hgRgb.b);
+            bgLabel.style.color = hgHex;
+            previewHeading.style.color = hgHex;
+            bgHash.style.color = hgHex;
+        }
+
+        function updateDisplay() {
+            const hex = currentColor.hex;
+            document.getElementById('hex-input').value = hex.slice(1).toUpperCase();
+
+            // RGB
+            document.getElementById('r-abs').value = currentColor.r;
+            document.getElementById('g-abs').value = currentColor.g;
+            document.getElementById('b-abs').value = currentColor.b;
+            document.getElementById('r-per').value = Math.round((currentColor.r / 255) * 100);
+            document.getElementById('g-per').value = Math.round((currentColor.g / 255) * 100);
+            document.getElementById('b-per').value = Math.round((currentColor.b / 255) * 100);
+
+            // HSV
+            document.getElementById('h-abs').value = currentColor.h;
+            document.getElementById('s-abs').value = currentColor.s;
+            document.getElementById('v-abs').value = currentColor.v;
+
+            // Update square only
+            document.getElementById('color-square').style.backgroundColor = hex;
+
+            previousValidColor = { ...currentColor };
+        }
+
+        function validateAndParse(section) {
+            let r, g, b, h, s, v;
+            const errors = [];
+
+            if (section === 'hex' || section === 'bg') {
+                const inputId = section === 'hex' ? 'hex-input' : 'bg-input';
+                const hexVal = document.getElementById(inputId).value.trim().toUpperCase();
+                if (!/^[0-9A-F]{6}$/i.test(hexVal)) {
+                    errors.push(`${section.toUpperCase()}: 000000-FFFFFF digits only`);
+                    return null;
+                }
+                const rgb = hexToRgb(hexVal);
+                if (!rgb) return null;
+                r = rgb.r; g = rgb.g; b = rgb.b;
+                const hsv = rgbToHsv(r, g, b);
+                h = hsv.h; s = hsv.s; v = hsv.v;
+            } else if (section === 'hsv') {
+                const hAbs = parseInt(document.getElementById('h-abs').value || 0, 10);
+                const sAbs = parseInt(document.getElementById('s-abs').value || 0, 10);
+                const vAbs = parseInt(document.getElementById('v-abs').value || 0, 10);
+
+                if (isNaN(hAbs) || hAbs < 0 || hAbs > 360) errors.push('Hue: 0-360 digits only');
+                if (isNaN(sAbs) || sAbs < 0 || sAbs > 100) errors.push('Saturation: 0-100 digits only');
+                if (isNaN(vAbs) || vAbs < 0 || vAbs > 100) errors.push('Value: 0-100 digits only');
+
+                if (!errors.length) {
+                    h = hAbs;
+                    s = sAbs;
+                    v = vAbs;
+                }
+                const rgb = hsvToRgb(h, s, v);
+                r = rgb.r; g = rgb.g; b = rgb.b;
+            }
+
+            if (errors.length > 0) {
+                alert(errors.join('\n'));
+                return null;
+            }
+
+            return { r, g, b, h, s, v, hex: rgbToHex(r, g, b) };
+        }
+
+        function commitUpdate(section) {
+            if (section === 'bg') {
+                const hexVal = document.getElementById('bg-input').value.trim().toUpperCase();
+                if (!/^[0-9A-F]{6}$/i.test(hexVal)) {
+                    alert('BG: 000000-FFFFFF digits only');
+                    return false;
+                }
+                // Only update center column background
+                centerColumn.style.backgroundColor = '#' + hexVal;
+                // Update heading color
+                updateHeadingColor(hexVal);
+                isDirty = false;
+                bgUpdateBtn.disabled = true;
+                return true;
+            } else {
+                const newColor = validateAndParse(section);
+                if (!newColor) {
+                    // Rollback fields to previous
+                    updateDisplay();
+                    return false;
+                }
+                currentColor = newColor;
+                // Only update preview square
+                updateDisplay();
+                isDirty = false;
+                basicUpdateBtn.disabled = true;
+                return true;
+            }
+        }
+
+        function handleInputChange(input, section) {
+            // Simple dirty flag on any non-empty input
+            isDirty = true;
+            if (section === 'bg') {
+                bgUpdateBtn.disabled = false;
+            } else {
+                document.querySelector(`input[name="color-mode"][value="${section}"]`).checked = true;
+                currentSection = section;
+                basicUpdateBtn.disabled = false;
+            }
+        }
+
+        function handleFocus(input) {
+            const section = input.dataset.section || input.id === 'bg-input' ? 'bg' : null;
+            if (section && section !== currentSection && isDirty) {
+                // Silent commit
+                const success = commitUpdate(currentSection);
+                if (!success) {
+                    input.blur();
+                    return;
+                }
+            }
+            if (section) {
+                if (section !== 'bg') {
+                    document.querySelector(`input[name="color-mode"][value="${section}"]`).checked = true;
+                }
+                currentSection = section;
+            }
+        }
+
+        function syncRgbPerToAbs() {
+            if (isSyncing) return;
+            isSyncing = true;
+
+            // Sync Red
+            const rPerVal = parseFloat(document.getElementById('r-per').value) || 0;
+            if (!isNaN(rPerVal) && rPerVal >= 0 && rPerVal <= 100) {
+                const rAbsVal = Math.round((rPerVal / 100) * 255);
+                document.getElementById('r-abs').value = rAbsVal;
+            }
+
+            // Sync Green
+            const gPerVal = parseFloat(document.getElementById('g-per').value) || 0;
+            if (!isNaN(gPerVal) && gPerVal >= 0 && gPerVal <= 100) {
+                const gAbsVal = Math.round((gPerVal / 100) * 255);
+                document.getElementById('g-abs').value = gAbsVal;
+            }
+
+            // Sync Blue
+            const bPerVal = parseFloat(document.getElementById('b-per').value) || 0;
+            if (!isNaN(bPerVal) && bPerVal >= 0 && bPerVal <= 100) {
+                const bAbsVal = Math.round((bPerVal / 100) * 255);
+                document.getElementById('b-abs').value = bAbsVal;
+            }
+
+            // Trigger input change on abs to set dirty
+            ['r-abs', 'g-abs', 'b-abs'].forEach(id => {
+                const absInput = document.getElementById(id);
+                if (absInput) {
+                    handleInputChange(absInput, 'rgb');
+                }
+            });
+
+            isSyncing = false;
+        }
+
+        function handleHexInput(input) {
+            let value = input.value.toUpperCase();
+            let filtered = value.replace(/[^0-9A-F]/g, '');
+            let cleaned = filtered.slice(-6);
+            if (input.value !== cleaned) {
+                input.value = cleaned;
+            }
+            const section = input.id === 'hex-input' ? 'hex' : (input.id === 'bg-input' ? 'bg' : (input.id === 'secondary-hex' ? null : null));
+            if (section) {
+                handleInputChange(input, section);
+            }
+        }
+
+        function handleKeyDown(input, e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const section = input.dataset.section || (input.id === 'bg-input' ? 'bg' : currentSection);
+                if (section === 'rgb') {
+                    syncRgbPerToAbs();
+                }
+                commitUpdate(section);
+            }
+        }
+
+        // Alchemy Lab Functions
+        function swapChannels(a, b) {
+            const temp = currentColor[a];
+            currentColor[a] = currentColor[b];
+            currentColor[b] = temp;
+            const hsv = rgbToHsv(currentColor.r, currentColor.g, currentColor.b);
+            currentColor.h = hsv.h;
+            currentColor.s = hsv.s;
+            currentColor.v = hsv.v;
+            currentColor.hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+            updateDisplay();
+            isDirty = false;
+            basicUpdateBtn.disabled = true;
+            bgUpdateBtn.disabled = true;
+        }
+
+        function applyRgbMidpoint() {
+            const secHex = document.getElementById('secondary-hex').value.trim().toUpperCase();
+            if (!/^[0-9A-F]{6}$/i.test(secHex)) {
+                alert('Secondary: 000000-FFFFFF digits only');
+                return;
+            }
+            const secRgb = hexToRgb(secHex);
+            if (!secRgb) return;
+            currentColor.r = Math.max(0, Math.min(255, Math.round((currentColor.r + secRgb.r) / 2)));
+            currentColor.g = Math.max(0, Math.min(255, Math.round((currentColor.g + secRgb.g) / 2)));
+            currentColor.b = Math.max(0, Math.min(255, Math.round((currentColor.b + secRgb.b) / 2)));
+            const hsv = rgbToHsv(currentColor.r, currentColor.g, currentColor.b);
+            currentColor.h = hsv.h;
+            currentColor.s = hsv.s;
+            currentColor.v = hsv.v;
+            currentColor.hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+            updateDisplay();
+            isDirty = false;
+            basicUpdateBtn.disabled = true;
+            bgUpdateBtn.disabled = true;
+        }
+
+        function applyBrightnessMidpoint() {
+            const secHex = document.getElementById('secondary-hex').value.trim().toUpperCase();
+            if (!/^[0-9A-F]{6}$/i.test(secHex)) {
+                alert('Secondary: 000000-FFFFFF digits only');
+                return;
+            }
+            const secRgb = hexToRgb(secHex);
+            if (!secRgb) return;
+            const secHsv = rgbToHsv(secRgb.r, secRgb.g, secRgb.b);
+            const newV = Math.max(0, Math.min(100, Math.round((currentColor.v + secHsv.v) / 2)));
+            currentColor.v = newV;
+            const rgb = hsvToRgb(currentColor.h, currentColor.s, currentColor.v);
+            currentColor.r = rgb.r;
+            currentColor.g = rgb.g;
+            currentColor.b = rgb.b;
+            currentColor.hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+            updateDisplay();
+            isDirty = false;
+            basicUpdateBtn.disabled = true;
+            bgUpdateBtn.disabled = true;
+        }
+
+        // Event listeners
+        // Hex
+        document.getElementById('hex-input').addEventListener('input', function() {
+            handleHexInput(this);
+        });
+        document.getElementById('hex-input').addEventListener('focus', function() {
+            handleFocus(this);
+        });
+        document.getElementById('hex-input').addEventListener('keydown', function(e) {
+            handleKeyDown(this, e);
+        });
+        document.getElementById('hex-input').dataset.section = 'hex';
+
+        // RGB
+        ['r-abs', 'r-per', 'g-abs', 'g-per', 'b-abs', 'b-per'].forEach(id => {
+            const input = document.getElementById(id);
+            input.dataset.section = 'rgb';
+            input.addEventListener('input', () => handleInputChange(input, 'rgb'));
+            input.addEventListener('focus', () => handleFocus(input));
+            input.addEventListener('blur', () => {
+                if (id.endsWith('-per')) {
+                    syncRgbPerToAbs();
+                }
+            });
+            input.addEventListener('keydown', (e) => handleKeyDown(input, e));
+        });
+
+        // HSV
+        ['h-abs', 's-abs', 'v-abs'].forEach(id => {
+            const input = document.getElementById(id);
+            input.dataset.section = 'hsv';
+            input.addEventListener('input', () => handleInputChange(input, 'hsv'));
+            input.addEventListener('focus', () => handleFocus(input));
+            input.addEventListener('keydown', (e) => handleKeyDown(input, e));
+        });
+
+        // BG input
+        document.getElementById('bg-input').addEventListener('input', function() {
+            handleHexInput(this);
+        });
+        document.getElementById('bg-input').addEventListener('focus', function() {
+            handleFocus(this);
+        });
+        document.getElementById('bg-input').addEventListener('keydown', function(e) {
+            handleKeyDown(this, e);
+        });
+
+        // Secondary hex
+        document.getElementById('secondary-hex').addEventListener('input', function() {
+            handleHexInput(this);
+        });
+
+        // Preview square click to copy
+        document.getElementById('color-square').addEventListener('click', async function() {
+            try {
+                await navigator.clipboard.writeText(currentColor.hex);
+                toast.textContent = 'Hex copied to clipboard!';
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                alert('Copy failed—use Ctrl+C on the hex field instead.');
+            }
+        });
+
+        // Update buttons
+        basicUpdateBtn.addEventListener('click', function() {
+            if (currentSection === 'rgb') {
+                syncRgbPerToAbs();
+            }
+            commitUpdate(currentSection);
+        });
+        bgUpdateBtn.addEventListener('click', function() {
+            commitUpdate('bg');
+        });
+
+        // Alchemy buttons
+        document.getElementById('swap-rg').addEventListener('click', () => swapChannels('r', 'g'));
+        document.getElementById('swap-gb').addEventListener('click', () => swapChannels('g', 'b'));
+        document.getElementById('swap-br').addEventListener('click', () => swapChannels('b', 'r'));
+        document.getElementById('rgb-midpoint').addEventListener('click', applyRgbMidpoint);
+        document.getElementById('brightness-midpoint').addEventListener('click', applyBrightnessMidpoint);
+
+        // Radios - ignore manual toggles
+        document.querySelectorAll('input[name="color-mode"]').forEach(radio => {
+            radio.addEventListener('change', function(e) {
+                e.preventDefault();
+                return false;
+            });
+        });
+
+        // Init
+        updateDisplay();
+        updateHeadingColor('FFFFFF'); // Initial BG
+    </script>
+</body>
+</html>
