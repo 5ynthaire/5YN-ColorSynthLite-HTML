@@ -8,7 +8,7 @@ A lightweight offline tool for hex color experiments
 
 ## Screenshot
 
-!(Preview)[preview.png]
+![Preview](assets/preview.png)
 
 ## Use
 
